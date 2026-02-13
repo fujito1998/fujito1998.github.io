@@ -1,0 +1,311 @@
+.logo {
+  height: 50px;
+}
+
+:root {
+  box-sizing: border-box;
+  --text: #fff;
+  --main: #059400;
+  --sub: #664f04;
+  --white: #fff;
+}
+
+header {
+  & {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    right: 0;
+    left: 0;
+    font-family: "游ゴシック";
+    font-size: 1rem;
+    background-color: var(--main);
+    border-bottom: var(--sub) groove 1rem;
+    transform-origin: 0 0;
+  }
+
+  & .lface {
+    & {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      gap: 1rem;
+      color: var(--text);
+
+      & h1 {
+        margin: 0;
+      }
+    }
+  }
+
+  & nav {
+    & a {
+      & {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--text);
+        margin: 0;
+        transition: 1s;
+      }
+
+      &:hover {
+        transition: 1s;
+        border: var(--sub) 0.25rem inset;
+      }
+    }
+  }
+}
+
+main {
+  margin-top: 75px;
+  background-color: var(--white);
+}
+
+section,
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intro {
+  & {
+    content: "";
+  }
+
+  & h3 {
+    text-align: center;
+  }
+}
+
+@keyframes writtening {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#hero {
+  & {
+    content: "";
+  }
+
+  & div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    & img {
+      max-width: 100%;
+    }
+  }
+
+  & svg {
+    & {
+      width: 95vw;
+      height: auto;
+      cursor: pointer;
+    }
+  }
+
+  & path.letter {
+    & {
+      animation: writtening 1s ease infinite alternate forwards;
+      stroke-dashoffset: 64;
+      stroke-dasharray: 64;
+    }
+  }
+}
+
+@keyframes loop {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+#Products {
+  & .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+      & svg {
+        height: 0;
+        stroke-dashoffset: 1;
+        stroke-dasharray: 1;
+
+        &.roughano {
+          width: 110%;
+          height: 110%;
+          position: absolute;
+          pointer-events: none;
+          animation: loop 4s 0s infinite reverse;
+        }
+      }
+    }
+  }
+}
+
+section.Flowon {
+  height: 100vh;
+}
+
+.Flowon svg {
+  width: auto;
+  height: 400px;
+  pointer-events: none;
+}
+
+
+.honesty {
+  & {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #00ff37;
+  }
+
+  & .input {
+    display: flex;
+    flex-direction: column;
+
+    & .chara {
+      display: flex;
+    }
+  }
+
+  & .throw {
+    & {
+      cursor: pointer;
+    }
+  }
+
+  & .throw:hover {
+    transform: rotate(10deg);
+    scale: 1.1;
+    transition: 0.1s;
+  }
+
+  & .spring {
+    & {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 50vw;
+      height: 50vh;
+      background-color: #00ffff;
+    }
+
+    & img {
+      opacity: 0;
+    }
+  }
+}
+
+.btn.btn-outline {
+  background: transparent;
+  border-color: #ff9eb5;
+  border-style: solid;
+  border-width: 2px;
+  display: inline-block;
+  border-radius: 0.5rem;
+  color: #ff9eb5;
+
+  &:hover {
+    /* color: white; */
+    background-color: #ffe4ee;
+  }
+}
+
+@media (min-width: 768px) {
+  header {
+    font-size: 2rem;
+  }
+
+  section {
+    & {
+      display: block;
+    }
+
+    & .intro h2 {
+      text-align: inherit;
+    }
+  }
+
+  #hero {
+    & {
+      content: "";
+    }
+
+    & div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+
+      & img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  #Products {
+    & .intro {
+      max-width: fit-content;
+    }
+
+    & a {
+      display: inline;
+      position: relative;
+
+      &:hover {
+        & svg {
+          width: 110%;
+          height: 110%;
+          position: absolute;
+          pointer-events: none;
+          animation: loop 4s 0s infinite alternate;
+
+          & path {
+            stroke: var(--main);
+          }
+        }
+      }
+    }
+
+    & p {
+      width: 0;
+      min-width: 100%;
+    }
+  }
+
+  .gallery {
+    & {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+
+  .honesty {
+    .input {
+      flex-direction: row;
+
+      .chara .throw img {
+        transform-origin: 50% 100%;
+        transform: rotate(90deg);
+      }
+    }
+  }
+}

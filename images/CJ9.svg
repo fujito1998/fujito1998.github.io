@@ -1,0 +1,19 @@
+<svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      style="background: transparent; background-color: transparent"
+      version="1.1"
+      width="45px"
+      height="84px"
+      viewBox="-2 -2 54 104"
+    >
+      <defs />
+      <path
+        d="M 25 25 m17.67766953 -17.67766953 a 25 25 0 1 0 0 35.35533906 M 50 0 v75 a25 25 0 1 1 -50 0"
+        fill="none"
+        stroke="#fff"
+        stroke-width="4"
+        stroke-miterlimit="10"
+        pointer-events="stroke"
+      />
+    </svg>
