@@ -173,7 +173,7 @@ class flower {
       res.push(wspd_ori + (index === 0 ? 0 : 1) + (res.at(-1) ?? 0));
       return res;
     }, []).map((e) => this.primes[e]);
-    this.wspds_primesquare = this.wspds_ori.map((e, i) => this.primes[10 * i + e])
+    this.wspds_primesquare = this.wspds_ori.map((e, i, a) => this.primes[a.length * e + i])
     this.wspds_primeston = this.wspds_ori.map((e) => this.primes[e])
       .reduce((res, wspd_prime) => {
         res.push(wspd_prime + (res.at(-1) ?? 0));
@@ -209,8 +209,8 @@ class flower {
 const drawn = (element) => {
   const now = new Date().getTime();
   const clock = String(now);
-  const seed = clock.slice(0, -12)
-  const calender = clock.slice(-12)
+  const seed = clock.slice(0, -8)
+  const calender = clock.slice(-8)
   const ori = calender.match(/.{1,2}/g);
   const aniverse = (1000 * 60 * 60 * 24 * 365.2425);
   let flowon = new flower(ori);
@@ -239,3 +239,4 @@ const test_bloom = (parray, spin = 360) => {
   console.log(test_flower);
   paper.setAttribute("d", test_flower.path())
 };
+
