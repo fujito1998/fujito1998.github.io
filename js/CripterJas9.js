@@ -158,13 +158,15 @@ const goddes = (command, str) => {
 class flower {
   /**
    * 
-   * @param {String[]} parray 
+   * @param {Number[]} wspd_ori 
+   * @param {Number[]} wlens_ori 
    */
-  constructor(parray) {
-    this.parray = parray;
-    this.wlens_ori = parray.map((e) => e[0]).map(Number);
-    this.max_wlen = this.wlens_ori.reduce((res, wlen) => { return res + 1 + wlen }, 0);
-    this.wspds_ori = parray.map((e) => e[1]).map(Number);
+  constructor(wspds_ori, wlens_ori, op_wlen = 0, op_wspd = 0) {
+    this.op_wlen = op_wlen;
+    this.op_wspd = op_wspd;
+    this.wlens_ori = wlens_ori;
+    this.wspds_ori = this.wlens_ori.map((e, i) => i < wspds_ori.length ? wspds_ori[i] : e % 10);
+    this.max_wlen = (this.wlens_ori.reduce((res, wlen) => { return res + 1 + Math.abs(wlen) }, 0) + op_wlen) / 1//((Math.SQRT2 - 1));
     this.primes =
       [
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541
@@ -172,32 +174,33 @@ class flower {
     this.wspds_pistomeirp = this.wspds_ori.reduce((res, wspd_ori, index) => {
       res.push(wspd_ori + (index === 0 ? 0 : 1) + (res.at(-1) ?? 0));
       return res;
-    }, []).map((e) => this.primes[e]);
-    this.wspds_primesquare = this.wspds_ori.map((e, i, a) => this.primes[a.length * e + i])
+    }, []).map((e, i) => (i % 2 === this.wlens_ori[i] % 2 ? -1 : 1) * this.primes[e]);
+    this.wspds_primesquare = this.wspds_ori.map((e, i, a) => (i % 2 === this.wlens_ori[i] % 2 ? -1 : 1) * this.primes[a.length * e + i])
     this.wspds_primeston = this.wspds_ori.map((e) => this.primes[e])
-      .reduce((res, wspd_prime) => {
-        res.push(wspd_prime + (res.at(-1) ?? 0));
+      .reduce((res, wspd_prime, i) => {
+        res.push((i % 2 === this.wlens_ori[i] % 2 ? -1 : 1) * wspd_prime + (res.at(-1) ?? 0));
         return res;
       }, []);
   }
+
   /**
    *
    */
   path(mode = "wspds_pistomeirp") {
-    let data = "M+1+0";
+    let data = "";
     const wspds = this[mode];
-    const maxpd = true ? Math.max(...wspds) : 360;
+    const maxpd = true ? Math.max(...wspds.map(e => Math.abs(e))) : 360;
     const spin = 360 / 15 * maxpd;
     for (const [angle, element] of Array(spin).fill(0).entries()) {
-      let point = { x: 0, y: 0 };
       const arc = (Math.PI * 2 * angle) / (spin);
+      let point = { x: this.op_wlen * Math.cos(arc * this.op_wspd), y: this.op_wlen * Math.sin(arc * this.op_wspd) };
+      const initial = angle === 0 ? "M" : "L";
       for (const [i, wlen] of this.wlens_ori.entries()) {
-        const dir = (i % 2 === 0 ? -1 : 1);
         let wspd = wspds[i];
-        point.x += (wlen + 1) * Math.cos(arc * wspd * dir);
-        point.y += (wlen + 1) * Math.sin(arc * wspd * dir);
+        point.x += (wlen + 1) * Math.cos(arc * wspd);
+        point.y += (wlen + 1) * Math.sin(arc * wspd);
       }
-      data += `L${point.x / this.max_wlen} ${point.y / this.max_wlen}`;
+      data += `${initial}${point.x / this.max_wlen} ${point.y / this.max_wlen}`;
     }
     return data + "z";
   }
@@ -207,20 +210,19 @@ class flower {
  * @param {HTMLElement} element 
  */
 const drawn = (element) => {
-  const now = new Date().getTime();
-  const clock = String(now);
-  const seed = clock.slice(0, -8)
-  const calender = clock.slice(-8)
-  const ori = calender.match(/.{1,2}/g);
+  const now = new Date();
+  const clock = String(now.getTime());
+  const op_wlen = Number(clock.slice(0, -12));
+  const wlens = clock.slice(-12, -4).match(/.{1,2}/g).map(Number).map(e => (Math.floor(e / 2) + 1) * (e % 2 === 0 ? -1 : 1)).reverse();
+  const wspds = clock.slice(-4).split("").map(Number);
+  const ori = clock.slice(clock.length % 3, -0).match(/.{1,3}/g);
   const aniverse = (1000 * 60 * 60 * 24 * 365.2425);
-  let flowon = new flower(ori);
+  let flowon = new flower(wspds, wlens, op_wlen, now.getDay());
   console.log(flowon);
-  console.log(now);
+  console.log(now.getTime());
   console.log(now % aniverse);
   console.log((now % aniverse) / aniverse);
-  console.log(calender / seed);
   for (const e of element.querySelectorAll("svg")) {
-    console.dir(e);
     e.firstElementChild.setAttribute("d", flowon.path(e.getAttribute("mode")))
   };
   document.title = ori
@@ -239,4 +241,3 @@ const test_bloom = (parray, spin = 360) => {
   console.log(test_flower);
   paper.setAttribute("d", test_flower.path())
 };
-
